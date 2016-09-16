@@ -1,8 +1,18 @@
 <?php
 
-$GLOBALS['config'] = array(
-	'upload_directory' => __DIR__ . '/../files',
-	'upload_server' => 'http://down.ÿ.fr',
+$GLOBALS['config'] = [
+	// this is where uploaded files will be saved, one
+	// subdirectory per day will be created:
+	'upload_directory' => __DIR__ . '/../www/files',
+
+	// this is the address from which the uploaded
+	// files will be available, you should use a
+	// subdomain if you can, something like:
+	//'upload_server' => 'https://files.example.com',
+	// but if you can't, this will do:
+	'upload_server' => 'files',
+
+	// max acceptable size, in bytes:
 	'max_size' => 50*1024*1024,
-);
+];
 
