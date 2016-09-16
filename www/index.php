@@ -23,6 +23,15 @@ $sizes = array('B','kB','MB','GB','TB');
 $factor = min(floor((strlen($GLOBALS['config']['max_size']) - 1) / 3), count($sizes) - 1);
 $max_size_text = $GLOBALS['config']['max_size'] / pow(1024, $factor) . $sizes[$factor];
 
+if ($_SERVER['HTTP_ACCEPT'] == 'text/plain' or 
+		(count($uploaded_files) && strpos($_SERVER['HTTP_USER_AGENT'], 'curl/') === 0)) {
+	foreach ($uploaded_files as $file) {
+		echo $file->url()."\n";
+	}
+
+	die();
+}
+
 $uploaded = "";
 
 if (count($uploaded_files)) {
@@ -140,6 +149,14 @@ HTML;
 				background: #FFFFEE;
 			}
 
+			#usage {
+				position: absolute;
+				bottom: 3em;
+				width: 100%;
+				left: 0;
+				text-align: center;
+			}
+
 			#credits {
 				position: absolute;
 				bottom: 1em;
@@ -160,6 +177,7 @@ HTML;
 			<input type="submit" value="Up" />
 		</form>
 		<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
+		<p id="usage"><code>curl --upload-file &lt;/home/you/local-file.png&gt;</code></p>
 		<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a></p>
 	</body>
 </html>
