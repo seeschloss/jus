@@ -1,4 +1,9 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+	require __DIR__.'/put.php';
+	die();
+}
+
 require __DIR__.'/../inc/common.inc.php';
 
 $uploaded_files = [];
