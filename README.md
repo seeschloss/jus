@@ -24,6 +24,17 @@ If you want to be able to use PUT queries to upload files with `curl`, you will 
 the PUT handler script for Apache (it can work with Nginx as well, but you will have to research it yourself).
 This means enabling `mod_actions` and adding `Script PUT /put.php` in your virtual host section.
 
+#### Free.fr
+
+If you're going to host this on Free.fr's free hosting, you should first put the following in a file
+named `.htaccess` in your web directory:
+
+```
+<IfDefine Free>
+php56 1
+</IfDefine>
+```
+
 ## Configuration
 
 Then you should probably change the configuration defaults:
@@ -65,3 +76,4 @@ today minus 30 days, or minus 365 or 12 000 days.
 Something like:   
 `rm -rf "/path/to/jus/files/$(date --date='30 days ago' +'%Y-%m-%d')"`   
 in your cron.
+
