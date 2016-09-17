@@ -796,9 +796,17 @@ class File {
 		return $this->extension;
 	}
 
+	public static function random_hex($length) {
+		if (function_exists('random_bytes')) {
+			return bin2hex(random_bytes($length));
+		} else {
+			return substr(md5(rand(0, getrandmax())), 0, $length * 2);
+		}
+	}
+
 	public function create_name($directory, $extension) {
 		do {
-			$name = Base60::encode(base_convert(bin2hex(random_bytes(7)), 16, 10));
+			$name = Base60::encode(base_convert(self::random_hex(7), 16, 10));
 
 			if ($extension) {
 				$name = $name.".".$extension;
