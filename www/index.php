@@ -182,7 +182,7 @@ HTML;
 			<input type="submit" value="Up" />
 		</form>
 		<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
-		<p id="usage"><code>curl --upload-file &lt;/home/you/local-file.png&gt;</code></p>
+		<p id="usage"><code>curl --upload-file &lt;/home/you/local-file.png&gt; http://up.ÿ.fr</code></p>
 		<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
 	</body>
 </html>
