@@ -59,10 +59,10 @@ The most obvious is clicking the *Select your file* button, selecting one or mor
 Once the upload is finished, the links to the files are shown.
 
 If `PUT` is correctly configured on your server, another way is to type this from command-line:   
-`curl -T <file> http://url-to-jus`
+`curl -T <file> https://url-to-jus`
 
 If it is not, curl can still upload easily enough using `POST`:   
-`curl -F "file[]"=@<file> http://url-to-jus`
+`curl -F "file[]"=@<file> https://url-to-jus`
 
 When using `curl`, the output will just contain the paths to the upload files, one by line.
 
