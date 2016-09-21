@@ -805,6 +805,10 @@ class File {
 	}
 
 	public function create_name($directory, $extension) {
+		if (!file_exists($directory)) {
+			mkdir($directory, 0777, TRUE);
+		}
+
 		do {
 			$name = Base60::encode(base_convert(self::random_hex(7), 16, 10));
 
