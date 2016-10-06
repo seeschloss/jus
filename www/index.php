@@ -8,6 +8,7 @@ require __DIR__.'/../inc/common.inc.php';
 
 $max_size_text = bytes_to_human($GLOBALS['config']['max_size']);
 
+$errors = [];
 $uploaded_files = [];
 
 if (!empty($_FILES)) {
@@ -20,7 +21,11 @@ if (!empty($_FILES)) {
 			mkdir($destination_directory, 0777, TRUE);
 		}
 
-		$file->move_uploaded_file($destination_directory);
+		if ($file->move_uploaded_file($destination_directory)) {
+			$uploaded_files[] = $file;
+		} else {
+			$errors['file'] = "Could not upload file.";
+		}
 
 		$uploaded_files[] = $file;
 	}
@@ -33,6 +38,20 @@ if ($_SERVER['HTTP_ACCEPT'] == 'text/plain' or
 	}
 
 	die();
+}
+
+$errors_text = "";
+
+if (count($errors)) {
+	$list_html = implode('</li><li>', $errors);
+	$errors_text = <<<HTML
+		<div id="errors">
+			<p>There have been some errors:</p>
+			<ul>
+				<li>{$list_html}</li>
+			</ul>
+		</div>
+HTML;
 }
 
 $uploaded = "";
@@ -83,10 +102,15 @@ HTML;
 				list-style-type: none;
 			}
 
-			#uploaded ul {
+			#errors {
+				color: #FEDCBA;
+			}
+
+			#uploaded ul, #errors ul {
 				display: inline-block;
 				text-align: left;
 				padding: 0;
+				margin-top: 0;
 			}
 
 			#file-input {
