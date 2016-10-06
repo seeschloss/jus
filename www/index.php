@@ -6,6 +6,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 require __DIR__.'/../inc/common.inc.php';
 
+$max_size_text = bytes_to_human($GLOBALS['config']['max_size']);
+
 $uploaded_files = [];
 
 if (!empty($_FILES)) {
@@ -23,10 +25,6 @@ if (!empty($_FILES)) {
 		$uploaded_files[] = $file;
 	}
 }
-
-$sizes = array('B','kB','MB','GB','TB');
-$factor = min(floor((strlen($GLOBALS['config']['max_size']) - 1) / 3), count($sizes) - 1);
-$max_size_text = $GLOBALS['config']['max_size'] / pow(1024, $factor) . $sizes[$factor];
 
 if ($_SERVER['HTTP_ACCEPT'] == 'text/plain' or 
 		(count($uploaded_files) && strpos($_SERVER['HTTP_USER_AGENT'], 'curl/') === 0)) {
