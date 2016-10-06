@@ -80,13 +80,21 @@ HTML;
 	<head>
 		<title>Just upload stuff.</title>
 		<style>
+			html, body {
+				height: 100%;
+			}
+
 			body {
 				font-family: sans-serif;
-				padding: 20px 30%;
+				margin: auto;
+				width: 30%;
+				min-width: 600px;
 				background: #555;
 				color: #DDD;
 				text-shadow: 1px 1px black;
 				text-align: center;
+				display: flex;
+				flex-direction: column;
 			}
 
 			a {
@@ -156,13 +164,13 @@ HTML;
 				border-radius: 2px;
 				color: black;
 				text-shadow: none;
-				height: 30px;
+				height: 40px;
 				line-height: 30px;
 				display: block;
 				margin: 10px auto;
 				vertical-align: middle;
 				padding: 5px 20px;
-				box-sizing: content-box;
+				box-sizing: border-box;
 				font-size: 100%;
 			}
 			
@@ -176,35 +184,38 @@ HTML;
 				background: #FFFFEE;
 			}
 
-			#usage {
-				position: absolute;
-				bottom: 3em;
+			#content {
+				flex-grow: 1;
+			}
+
+			#footer {
 				width: 100%;
 				left: 0;
 				text-align: center;
 			}
 
-			#credits {
-				position: absolute;
-				bottom: 1em;
-				width: 100%;
-				left: 0;
-				text-align: center;
+			#url-form {
+				margin-top: 3em;
 			}
 
 		</style>
 	</head>
 	<body>
-		<h1>Just upload stuff.</h1>
-			<?php echo $uploaded; ?>
-		<form id="upload-form" action="" enctype="multipart/form-data" method="POST">
-			<label id="file-label">Select your file...
-				<input multiple="multiple" required="required" id="file-input" type="file" name="file[]" />
-			</label>
-			<input type="submit" value="Up" />
-		</form>
-		<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
-		<p id="usage"><code>curl --upload-file &lt;/home/you/local-file.png&gt; http://up.ÿ.fr</code></p>
-		<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
+		<div id="content">
+			<h1>Just upload stuff.</h1>
+				<?php echo $errors_text; ?>
+				<?php echo $uploaded; ?>
+			<form id="upload-form" action="" enctype="multipart/form-data" method="POST">
+				<label id="file-label">Select your file...
+					<input multiple="multiple" required="required" id="file-input" type="file" name="file[]" />
+				</label>
+				<input type="submit" value="Up" />
+			</form>
+			<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
+		</div>
+		<div id="footer">
+			<p id="usage"><code>curl --upload-file &lt;/home/you/local-file.png&gt; up.ÿ.fr</code></p>
+			<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
+		</div>
 	</body>
 </html>
