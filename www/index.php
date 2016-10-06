@@ -26,6 +26,54 @@ if (!empty($_FILES)) {
 		} else {
 			$errors['file'] = "Could not upload file.";
 		}
+	}
+} else if (!empty($_POST['url']) and preg_match("/https?:/", $_POST['url'])) {
+	$file = new File();
+
+	$directory = $GLOBALS['config']['upload_directory']."/".date("Y-m-d");
+	$file->path = $file->create_name($directory, null);
+	$putdata = fopen($_POST['url'], "r");
+
+	$fp = fopen($file->path, "w");
+	foreach ($http_response_header as $header) {
+		if (strpos($header, ':') !== FALSE) {
+			list($key, $value) = explode(':', $header, 2);
+
+			if (strtolower(trim($key)) === 'content-length') {
+				if ($value > $GLOBALS['config']['max_size']) {
+					$file_size_human = bytes_to_human($value);
+					$errors['url'] = "File larger than {$max_size_text} ({$file_size_human}).";
+				}
+			}
+		}
+	}
+
+	if (!count($errors)) {
+		$readsize = 1024;
+		$size = 0;
+		while ($data = fread($putdata, $readsize)) {
+			$size += $readsize;
+			fwrite($fp, $data);
+
+			if ($size > $GLOBALS['config']['max_size']) {
+				fclose($fp);
+				fclose($putdata);
+				unlink($file->path);
+				$errors['url'] = "File larger than {$max_size_text}.";
+				break;
+			}
+		}
+	}
+
+	if (!count($errors)) {
+		fclose($fp);
+		fclose($putdata);
+
+		$extension = $file->extension();
+		$final_path = $file->create_name($directory, $extension);
+
+		rename($file->path, $final_path);
+		$file->path = $final_path;
 
 		$uploaded_files[] = $file;
 	}
@@ -154,6 +202,22 @@ HTML;
 				padding-top: 1px;
 				padding-left: 1px;
 			}
+
+			#url-input {
+				height: 40px;
+				line-height: 40px;
+				display: block;
+				margin: 10px auto;
+				vertical-align: middle;
+				padding: 5px 20px;
+				font-size: 100%;
+				width: 100%;
+
+				box-sizing: border-box;
+				border: 1px inset;
+				border-radius: 2px;
+				text-align: center;
+			}
 			
 			#file-label, input[type="submit"] {
 				overflow: hidden;
@@ -209,6 +273,10 @@ HTML;
 				<label id="file-label">Select your file...
 					<input multiple="multiple" required="required" id="file-input" type="file" name="file[]" />
 				</label>
+				<input type="submit" value="Up" />
+			</form>
+			<form id="url-form" action="" method="POST">
+				<input id="url-input" name="url" type="url" placeholder="... or an URL" />
 				<input type="submit" value="Up" />
 			</form>
 			<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
