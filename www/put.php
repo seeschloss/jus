@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 	if ($_SERVER['CONTENT_LENGTH'] > $GLOBALS['config']['max_size']) {
 		 header("HTTP/1.0 413 Request Entity Too Large");
+		 echo "Upload size is limited to ".bytes_to_human($GLOBALS['config']['max_size'])."\n";
 		 die();
 	}
 
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 		 if (filesize($file->path) > $GLOBALS['config']['max_size']) {
 			 header("HTTP/1.0 413 Request Entity Too Large");
+			 echo "Upload size is limited to ".bytes_to_human($GLOBALS['config']['max_size'])."\n";
 			 fclose($fp);
 			 fclose($putdata);
 			 unlink($file->path);
