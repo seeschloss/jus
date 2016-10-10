@@ -79,6 +79,12 @@ if (!empty($_FILES)) {
 	}
 }
 
+if (!empty($_REQUEST['clean-metadata'])) {
+	foreach ($uploaded_files as $file) {
+		$file->clean_metadata();
+	}
+}
+
 if ($_SERVER['HTTP_ACCEPT'] == 'text/plain' or 
 		(count($uploaded_files) && strpos($_SERVER['HTTP_USER_AGENT'], 'curl/') === 0)) {
 	foreach ($uploaded_files as $file) {
@@ -126,6 +132,7 @@ HTML;
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="icon" type="image/png" href="ij.png">
 		<title>Just upload stuff.</title>
 		<style>
 			html, body {
@@ -262,6 +269,19 @@ HTML;
 				margin-top: 3em;
 			}
 
+			form {
+				position: relative;
+			}
+
+			label.checkbox {
+				position: absolute;
+				left: 0;
+			}
+
+			label.checkbox input {
+				vertical-align: middle;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -273,10 +293,12 @@ HTML;
 				<label id="file-label">Select your file...
 					<input multiple="multiple" required="required" id="file-input" type="file" name="file[]" />
 				</label>
+				<label class="checkbox" for="clean-metadata-1">Strip image metadata <input id="clean-metadata-1" name="clean-metadata" value="1" type="checkbox" /></label>
 				<input type="submit" value="Up" />
 			</form>
 			<form id="url-form" action="" method="POST">
 				<input id="url-input" name="url" type="url" placeholder="... or an URL" />
+				<label class="checkbox" for="clean-metadata-2">Strip image metadata <input id="clean-metadata-2" name="clean-metadata" value="1" type="checkbox" /></label>
 				<input type="submit" value="Up" />
 			</form>
 			<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>

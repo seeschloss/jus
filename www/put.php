@@ -39,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 	rename($file->path, $final_path);
 	$file->path = $final_path;
 
+	if (!empty($_REQUEST['clean-metadata'])) {
+		$file->clean_metadata();
+	}
+
 	echo $file->url()."\n";
 }
 

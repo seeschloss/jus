@@ -861,4 +861,47 @@ class File {
 
 		return null;
 	}
+
+	public function clean_metadata() {
+		if ($this->mime() === 'image/jpeg') {
+			$handle = fopen($this->path, "rb");
+			$segment[] = fread($handle, 2);
+
+			if ($segment[0] === "\xFF\xD8") {
+
+				$segment[] = fread($handle, 1);
+				if ($segment[1] === "\xFF") {
+
+					rewind($handle);
+
+					while (!feof($handle)) {
+						$data = fread($handle, 2);
+						if ((preg_match("/FFE[1-9a-zA-Z]{1,1}/i", bin2hex($data))) || ($data === "\xFF\xFE")) {
+							$position = ftell($handle);
+							$size = fread($handle, 2);
+							$newsize = 256 * ord($size{0}) + ord($size{1});
+							$newpos = $position + $newsize;
+							fseek($handle, $newpos);
+						} else {
+							$newfile[] = $data;
+						}
+					}
+					fclose($handle);
+					$newfile = implode('', $newfile);
+					$handle = fopen($this->path, "wb");
+
+					fwrite($handle, $newfile);
+					fclose($handle);
+
+					return TRUE;
+				} else {
+					return FALSE;
+				}
+			} else {
+				return FALSE;
+			}
+		}
+
+		return FALSE;
+	}
 }
