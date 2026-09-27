@@ -12,6 +12,10 @@ $GLOBALS['config'] = [
 	// but if you can't, this will do:
 	'upload_server' => 'files',
 
+	// The upload server url that is displayed, for example
+	// in the curl command example
+	'base_server' => 'up.ÿ.fr',
+
 	// max acceptable size, in bytes:
 	'max_size' => 50*1024*1024,
 ];
