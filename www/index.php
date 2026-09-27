@@ -323,7 +323,7 @@ HTML;
 		</div>
 		<div id="footer">
 			<p id="usage"><code>curl <?php echo $GLOBALS["config"]["base_server"]; ?> <?php if ($is_password_protected) { echo "-u :&lt;password&gt; "; } ?>--upload-file &lt;/home/you/local-file.png&gt;</code></p>
-			<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
+			<p id="credits"><a href="mailto:<?php echo $GLOBALS["config"]["contact_email"]; ?>"><?php echo $GLOBALS["config"]["contact_email"]; ?></a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
 		</div>
 	</body>
 </html>

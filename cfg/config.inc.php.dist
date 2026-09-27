@@ -16,6 +16,8 @@ $GLOBALS['config'] = [
 	// in the curl command example
 	'base_server' => 'up.ÿ.fr',
 
+	'contact_email' => 'see@seos.fr',
+
 	// max acceptable size, in bytes:
 	'max_size' => 50*1024*1024,
 
