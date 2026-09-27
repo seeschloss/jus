@@ -42,6 +42,7 @@ docker build . -t jus
 docker run \
     -p 8080:80 \
     -e UPLOAD_SERVER=http://localhost:8080/files \
+    -e BASE_SERVER=localhost:8080 \
     --mount type=volume,src=jus_files,dst=/var/www/html/files \
     jus
 ```
