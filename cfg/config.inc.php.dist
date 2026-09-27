@@ -18,5 +18,7 @@ $GLOBALS['config'] = [
 
 	// max acceptable size, in bytes:
 	'max_size' => 50*1024*1024,
+
+	'password' => NULL,
 ];
 

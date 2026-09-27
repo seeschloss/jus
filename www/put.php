@@ -4,6 +4,20 @@ require __DIR__.'/../inc/common.inc.php';
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 	$putdata = fopen("php://input", "r");
 
+	$is_password_protected = array_key_exists('password', $GLOBALS['config']) && !is_null($GLOBALS['config']['password']) && strlen($GLOBALS['config']['password']) > 0;
+
+	if ($is_password_protected) {
+		if (!array_key_exists("PHP_AUTH_PW", $_SERVER)) {
+			header("HTTP/1.0 401 Unauthorized");
+			echo "No password.\n";
+			die();
+		} else if ($_SERVER["PHP_AUTH_PW"] != $GLOBALS['config']['password']) {
+			header("HTTP/1.0 401 Unauthorized");
+			echo "Wrong password.\n";
+			die();
+		}
+	}
+
 	if ($_SERVER['CONTENT_LENGTH'] > $GLOBALS['config']['max_size']) {
 		 header("HTTP/1.0 413 Request Entity Too Large");
 		 echo "Upload size is limited to ".bytes_to_human($GLOBALS['config']['max_size'])."\n";

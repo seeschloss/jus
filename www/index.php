@@ -11,7 +11,18 @@ $max_size_text = bytes_to_human($GLOBALS['config']['max_size']);
 $errors = [];
 $uploaded_files = [];
 
-if (!empty($_FILES)) {
+$is_password_protected = array_key_exists('password', $GLOBALS['config']) && !is_null($GLOBALS['config']['password']) && strlen($GLOBALS['config']['password']) > 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $is_password_protected) {
+	if (!array_key_exists("password", $_POST)) {
+		$errors["password"] = "No password.";
+	}
+	if ($_POST["password"] != $GLOBALS['config']['password']) {
+		$errors["password"] = "Wrong password.";
+	}
+}
+
+if (count($errors) == 0 && !empty($_FILES)) {
 	$nfiles = count($_FILES['file']['tmp_name']);
 	for ($i = 0; $i < $nfiles; $i++) {
 		$file = new File($_FILES['file']['tmp_name'][$i]);
@@ -27,7 +38,7 @@ if (!empty($_FILES)) {
 			$errors['file'] = "Could not upload file.";
 		}
 	}
-} else if (!empty($_POST['url']) and preg_match("/https?:/", $_POST['url'])) {
+} else if (count($errors) == 0 && !empty($_POST['url']) and preg_match("/https?:/", $_POST['url'])) {
 	$file = new File();
 
 	$directory = $GLOBALS['config']['upload_directory']."/".date("Y-m-d");
@@ -211,7 +222,7 @@ HTML;
 				padding-left: 1px;
 			}
 
-			#url-input {
+			#url-input, #password-input-1, #password-input-2 {
 				height: 40px;
 				line-height: 40px;
 				display: block;
@@ -294,18 +305,24 @@ HTML;
 				<label id="file-label">Select your file...
 					<input multiple="multiple" required="required" id="file-input" type="file" name="file[]" />
 				</label>
+				<?php if($is_password_protected): ?>
+					<input id="password-input-1" name="password" type="text" placeholder="Password" required="required" />
+				<?php endif; ?>
 				<label class="checkbox" for="clean-metadata-1">Strip image metadata <input id="clean-metadata-1" name="clean-metadata" value="1" type="checkbox" /></label>
 				<input type="submit" value="Up" />
 			</form>
 			<form id="url-form" action="" method="POST">
-				<input id="url-input" name="url" type="url" placeholder="... or an URL" />
+				<input id="url-input" name="url" type="url" placeholder="... or an URL" required="required" />
+				<?php if($is_password_protected): ?>
+					<input id="password-input-2" name="password" type="text" placeholder="Password" required="required" />
+				<?php endif; ?>
 				<label class="checkbox" for="clean-metadata-2">Strip image metadata <input id="clean-metadata-2" name="clean-metadata" value="1" type="checkbox" /></label>
 				<input type="submit" value="Up" />
 			</form>
 			<p id="limitations">Maximum file size and total upload size is <?php echo $max_size_text; ?>.</p>
 		</div>
 		<div id="footer">
-			<p id="usage"><code>curl <?php echo $GLOBALS["config"]["base_server"]; ?> --upload-file &lt;/home/you/local-file.png&gt;</code></p>
+			<p id="usage"><code>curl <?php echo $GLOBALS["config"]["base_server"]; ?> <?php if ($is_password_protected) { echo "-u :&lt;password&gt; "; } ?>--upload-file &lt;/home/you/local-file.png&gt;</code></p>
 			<p id="credits"><a href="mailto:see@seos.fr">see@seos.fr</a> &mdash; <a href="https://github.com/seeschloss/jus">github.com/seeschloss/jus</a></p>
 		</div>
 	</body>
