@@ -35,7 +35,8 @@ if (!empty($_FILES)) {
 	$putdata = fopen($_POST['url'], "r");
 
 	$fp = fopen($file->path, "w");
-	foreach ($http_response_header as $header) {
+	$headers = http_get_last_response_headers();
+	foreach ($headers as $header) {
 		if (strpos($header, ':') !== FALSE) {
 			list($key, $value) = explode(':', $header, 2);
 
