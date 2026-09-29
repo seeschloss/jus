@@ -879,7 +879,7 @@ class File {
 						if ((preg_match("/FFE[1-9a-zA-Z]{1,1}/i", bin2hex($data))) || ($data === "\xFF\xFE")) {
 							$position = ftell($handle);
 							$size = fread($handle, 2);
-							$newsize = 256 * ord($size{0}) + ord($size{1});
+							$newsize = 256 * ord($size[0]) + ord($size[1]);
 							$newpos = $position + $newsize;
 							fseek($handle, $newpos);
 						} else {
