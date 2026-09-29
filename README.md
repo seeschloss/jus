@@ -35,6 +35,17 @@ php56 1
 </IfDefine>
 ```
 
+#### Docker
+
+```sh
+docker build . -t jus
+docker run \
+    -p 8080:80 \
+    -e UPLOAD_SERVER=http://localhost:8080/files \
+    --mount type=volume,src=jus_files,dst=/var/www/html/files \
+    jus
+```
+
 ## Configuration
 
 Then you should probably change the configuration defaults:
