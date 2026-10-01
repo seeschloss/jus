@@ -146,6 +146,7 @@ HTML;
 	<head>
 		<link rel="icon" type="image/png" href="ij.png">
 		<title>Just upload stuff.</title>
+		<script type="module" src="index.js"></script>
 		<style>
 			html, body {
 				height: 100%;
