@@ -11,6 +11,9 @@ RUN sed -i "s#'upload_directory' =>.*#'upload_directory' => '/var/www/html/files
     sed -i "s#'base_server' =>.*#'base_server' => \$_ENV[\"BASE_SERVER\"],#" cfg/config.inc.php && \
     sed -i "s#'contact_email' =>.*#'contact_email' => \$_ENV[\"CONTACT_EMAIL\"],#" cfg/config.inc.php && \
     sed -i "s#'password' =>.*#'password' => \$_ENV[\"PASSWORD\"] ?? NULL,#" cfg/config.inc.php && \
+    \
+    printf "upload_max_filesize = 100M\npost_max_size = 100M\n" > /usr/local/etc/php/conf.d/uploads.ini && \
+    \
     mkdir /var/www/html/files && \
     chown www-data:www-data /var/www/html/files
 
